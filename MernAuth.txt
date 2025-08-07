@@ -1,0 +1,9 @@
+1. Instalirao rect
+2.Tailwind verziju 3.14 radi
+3. git komande 
+		git init
+		git add .
+		git commit -m "tekst neki"
+ u github new repo i ne ubacam readMe fajl 
+ 4.react router dom, browserRouter routes route signin signout Ui
+ 5. kreiranje servera . u root npm init . npm express nodemoon
