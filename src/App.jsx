@@ -1,14 +1,20 @@
-
-import './App.css'
+import{BrowserRouter,Routes,Route} from 'react-router-dom'
+//import './App.css'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
 
 function App() {
   
 
   return (
-    <>
-      <h1 className='text-red-300'>Hello</h1>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='/signin' element={<SignIn />} />
+
+      </Routes>
       
-    </>
+    </BrowserRouter>
   )
 }
 
