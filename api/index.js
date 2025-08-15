@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
+import AuthRouter from './routes/auth.route.js'
 
 
 dotenv.config();
@@ -16,7 +17,15 @@ mongoose.connect(process.env.MONGO).then(()=>{
 
 
 
-const app = express()
+const app = express();
+app.use(express.json())
+
+
+app.use('/api/auth', AuthRouter)
+
+
+
+
 
 app.listen(3000,()=>{
     console.log('server listening');
