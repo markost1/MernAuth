@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs"
 import User from "../models/user.model.js"
 import { handleError } from "../utils/error.js";
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req,res,next) =>{
      try {
@@ -42,9 +43,18 @@ export const signin = async(req,res,next)=>{
         const validPassword = await bcrypt.compare(password,validUser.password);
         if(!validPassword) return next(handleError(401,'Invalid Password'))
 
+        const token = jwt.sign({id:validUser._id},
+            process.env.JWT_SECRET,
+            {expiresIn:'7d'}
+        )
+
         const {password:pass, ...rest} = validUser._doc;
 
-        res.status(200).json(rest)
+        res.cookie('access_token',token,{
+            httpOnly:true,
+            sameSite: 'strict',
+            expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)  
+            }).status(200).json(rest)
         
     } catch (error) {
         next(handleError(500,'Internal Server Error'))
