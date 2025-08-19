@@ -60,3 +60,19 @@ export const signin = async(req,res,next)=>{
         next(handleError(500,'Internal Server Error'))
     }
 }
+
+export const signout = (req,res,next) =>{
+    try {
+        res.clearCookie('access_token',{
+            httpOnly:true,
+            secure:process.env.NODE_ENV === 'production',
+            sameSite:"strict"
+        })
+        
+        res.status(200).json({message:'User is successfully signed out'})
+        
+    } catch (error) {
+        console.error("Sign out error:", error);
+        res.status(500).json({ message: "Server error during sign out" });
+    }
+}
