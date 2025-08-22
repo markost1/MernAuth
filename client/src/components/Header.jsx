@@ -14,19 +14,7 @@ export default function Header() {
             </Link>
                 
             </h1>
-            <ul className="flex gap-4">
-                <li> 
-                <Link to='/signin'>
-                    <button>Log In</button>   
-                </Link>
-                </li>
-                <span>/</span>
-                <li>
-                <Link to='/signup'>
-                     <button>Registration</button>
-                </Link>
-                </li>
-            </ul>
+         
         </div>
     </header>
     </div>
