@@ -3,6 +3,7 @@ import User from "../models/user.model.js"
 import { handleError } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
 import generateVertificationToken from "../utils/generateVertificationToken.js";
+import { sendVertificationEmail } from "../mailtrap/emails.js";
 
 export const signup = async (req,res,next) =>{
      try {
@@ -17,7 +18,9 @@ export const signup = async (req,res,next) =>{
         }
 
         const hashPassword = bcrypt.hashSync(password,10)
-        const vertificationToken = await generateVertificationToken() 
+        const vertificationToken = generateVertificationToken() 
+
+        
         
         const newUser = new User({
             username,
@@ -27,6 +30,8 @@ export const signup = async (req,res,next) =>{
             vertificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
         })
         await newUser.save()
+
+        await sendVertificationEmail(newUser.email, vertificationToken);
        
         res.status(201).json({
             success:true,
