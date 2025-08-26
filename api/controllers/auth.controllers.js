@@ -3,7 +3,7 @@ import User from "../models/user.model.js"
 import { handleError } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
 import generateVertificationToken from "../utils/generateVertificationToken.js";
-import { sendVertificationEmail } from "../mailtrap/emails.js";
+import { sendVertificationEmail, sendWelcomeMail } from "../mailtrap/emails.js";
 
 export const signup = async (req,res,next) =>{
      try {
@@ -27,7 +27,7 @@ export const signup = async (req,res,next) =>{
             email,
             password:hashPassword,
             vertificationToken,
-            vertificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
+            vertificationTokenExpiresAt:Date.now() + 15 * 60 * 1000,
         })
         await newUser.save()
 
@@ -88,4 +88,44 @@ export const signout = (req,res,next) =>{
         console.error("Sign out error:", error);
         res.status(500).json({ message: "Server error during sign out" });
     }
+}
+
+
+export const verifyEmail = async ( req,res,next ) =>{
+    const {code} = req.body;
+
+    try {
+        const user = await User.findOne({
+            vertificationToken:code,
+            vertificationTokenExpiresAt:{$gt:Date.now()},
+        })
+
+        if(!user){
+            return next(handleError(400,'Verification code is invalid or has expired. Please request a new one.'))
+        }
+
+        user.isVerify = true;
+        user.vertificationToken = undefined;
+        user.vertificationTokenExpiresAt = undefined;
+
+        await user.save();
+
+        await sendWelcomeMail(user.email, user.username);
+
+        res.status(200).json({
+            success:true,
+            message:"Email is successfully verified",
+            user:{
+                ...user._doc,
+                password:undefined,
+            }
+            
+
+        })
+
+    } catch (error) {
+        next(handleError(500, 'Internal Server Error'));
+        
+    }
+
 }
