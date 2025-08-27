@@ -27,7 +27,7 @@ export const signup = async (req,res,next) =>{
             email,
             password:hashPassword,
             vertificationToken,
-            vertificationTokenExpiresAt:Date.now() + 15 * 60 * 1000,
+            vertificationTokenExpiresAt:Date.now() + 1 * 60 * 1000,
         })
         await newUser.save()
 
@@ -128,4 +128,32 @@ export const verifyEmail = async ( req,res,next ) =>{
         
     }
 
+}
+
+export const resendVertificationToken = async(req,res,next) =>{
+    const {email} = req.body;
+    try {
+        const user = await User.findOne({email})
+        if(!user){
+            return next(handleError(404,'User not found'))
+        }
+        if(user.isVerify){
+            return next(handleError(400,'Acount is already verified'))
+        }
+        const newToken = generateVertificationToken();
+        user.vertificationToken = newToken
+        user.vertificationTokenExpiresAt = Date.now() + 1 * 60 * 1000
+
+        await user.save();
+
+        await sendVertificationEmail(user.email, newToken)
+
+        res.status(200).json({
+            success:true,
+            message:'A new vertification code has been send to your email.',
+        })
+
+    } catch (error) {
+        next(handleError(500,'Something went wrong, please try again later'))
+    }
 }
