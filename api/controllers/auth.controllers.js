@@ -3,7 +3,8 @@ import User from "../models/user.model.js"
 import { handleError } from "../utils/error.js";
 import jwt from 'jsonwebtoken';
 import generateVertificationToken from "../utils/generateVertificationToken.js";
-import { sendVertificationEmail, sendWelcomeMail } from "../mailtrap/emails.js";
+import crypto from 'crypto';
+import { sendPasswordResetEmail, sendVertificationEmail, sendWelcomeMail } from "../mailtrap/emails.js";
 
 export const signup = async (req,res,next) =>{
      try {
@@ -155,5 +156,36 @@ export const resendVertificationToken = async(req,res,next) =>{
 
     } catch (error) {
         next(handleError(500,'Something went wrong, please try again later'))
+    }
+}
+
+export const forgetPassword = async(req,res,next)=>{
+    const {email} = req.body;
+    try {
+        const user = await User.findOne({email})
+        if(!user){
+            return next(handleError(400,"If an account with this email exists, a password reset link has been sent."))
+        }
+
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetTokenExpireAt = Date.now() + 2 * 60 * 60 * 1000
+
+        user.resetPasswordToken= resetToken;
+        user.resetPasswordExpiresAt=resetTokenExpireAt;
+
+    await user.save();
+
+    sendPasswordResetEmail(user.email, `${process.env.RESET_EMAIL_URL}/reset-password/${resetToken}`)
+
+    res.status(200).json({
+        success:true,
+        message:"Password reset link send to your email",
+        
+    })
+
+
+    } catch (error) {
+        console.log(error);
+        
     }
 }
