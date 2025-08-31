@@ -27,7 +27,7 @@ app.use('/api/auth', AuthRouter)
 
 
 
-//error-handling middlewar
+//error-handling middleware
 
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500

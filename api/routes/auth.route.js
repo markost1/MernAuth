@@ -4,7 +4,7 @@ import { signin,
      signup,
      verifyEmail,
      resendVertificationToken,
-     forgetPassword,
+     forgotPassword,
      resetPassword } from '../controllers/auth.controllers.js';
 
 const router = express.Router()
@@ -15,7 +15,7 @@ router.post('/signin', signin)
 router.post('/signout', signout)
 router.post('/verify-email', verifyEmail)
 router.post('/resend-token', resendVertificationToken)
-router.post('/forget-password', forgetPassword)
+router.post('/forgot-password', forgotPassword)
 router.post('/reset-password/:token',resetPassword)
 
 
