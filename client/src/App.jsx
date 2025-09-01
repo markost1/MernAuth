@@ -8,6 +8,7 @@ import Footer from './components/Footer'
 import VertificationPage from './pages/VertificationPage'
 import ForgotPassword from './pages/ForgotPassword'
 import ForgotPasswordNotification from './pages/ForgotPasswordNotification'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
         <Route path='/vertification' element={<VertificationPage />}/>
         <Route path='/forgot-password' element= { <ForgotPassword />} />
         <Route path='/forgot-password-notification' element={ <ForgotPasswordNotification/>} />
+        <Route path='/reset-password/:token' element={ <ResetPassword />}/>
       </Routes>
       <Footer />
     </BrowserRouter>
