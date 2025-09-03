@@ -10,6 +10,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import ForgotPasswordNotification from './pages/ForgotPasswordNotification'
 import ResetPassword from './pages/ResetPassword'
 import ResetVerifyToken from './pages/ResetVerifyToken'
+import PrivateRoute from './components/PrivateRoute'
 
 function App() {
   
@@ -21,7 +22,11 @@ function App() {
         <Route path='/' element={ <Home />}/>
         <Route path='/signup' element={<SignUp />} />
         <Route path='/signin' element={<SignIn />} />
-        <Route path='/verify-email' element={<VertificationPage />}/>
+        <Route path='/verify-email' element={
+          <PrivateRoute>
+             <VertificationPage />
+          </PrivateRoute>
+         }/>
         <Route path='/resend-token' element={<ResetVerifyToken />} />
         <Route path='/forgot-password' element= { <ForgotPassword />} />
         <Route path='/forgot-password-notification' element={ <ForgotPasswordNotification/>} />

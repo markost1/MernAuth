@@ -6,6 +6,8 @@ import { signin,
      resendVertificationToken,
      forgotPassword,
      resetPassword } from '../controllers/auth.controllers.js';
+import { verifyToken } from '../utils/verifyToken.js';
+
 
 const router = express.Router()
 
@@ -13,7 +15,7 @@ const router = express.Router()
 router.post('/signup',signup)
 router.post('/signin', signin)
 router.post('/signout', signout)
-router.post('/verify-email', verifyEmail)
+router.post('/verify-email',verifyToken,verifyEmail)
 router.post('/resend-token', resendVertificationToken)
 router.post('/forgot-password', forgotPassword)
 router.post('/reset-password/:token',resetPassword)
