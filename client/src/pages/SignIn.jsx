@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom'
-import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice.js';
+import { signInFailure, signInStart, signInSuccess,clearError } from '../redux/user/userSlice.js';
 
 export default function SignIn() {
 
   const [formData, setFormData] = useState({});
+  const {loading,error} = useSelector((state)=> state.user )
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(()=>{
+    dispatch(clearError())
+  },[dispatch])
 
   const handleChange = (e) =>{
     setFormData({
@@ -59,7 +64,8 @@ export default function SignIn() {
         <form  onSubmit={handleSubmit} className='flex flex-col gap-5'>
             <input type='email' placeholder='Email' id='email' onChange={handleChange} className='p-3 border border-gray-400 rounded-lg'/>
             <input type='password' placeholder='Password' id='password' onChange={handleChange} className='p-3 border border-gray-400 rounded-lg'/>
-            <button className='p-3 border rounded-lg bg-gray-600 text-white uppercase hover:opacity-90 '>Log In</button>
+            <button disabled={loading} className='p-3 border rounded-lg bg-gray-600 text-white uppercase hover:opacity-90 '>
+            {loading ? 'Loading...' : 'Log In' }</button>
         </form>
         <div className='my-5 flex flex-col gap-3'>
         
@@ -73,7 +79,8 @@ export default function SignIn() {
             </span>
         </Link>
         </div>
+        {error && <p className= 'text-red-400 text-sm'>{error}</p>}
     </div>
     </div>
-  )
+  ) 
 }

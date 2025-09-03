@@ -12,7 +12,7 @@ import { sendPasswordResetEmail,
 export const signup = async (req,res,next) =>{
      try {
         const {username,email,password} = req.body; 
-        if(!username || !email || !password){
+        if(!username || !email || !password || (!username && !email && !password)){
             return next(handleError(400, 'All fields are required'))
         }
 
@@ -35,7 +35,7 @@ export const signup = async (req,res,next) =>{
         })
         await newUser.save()
 
-        await sendVertificationEmail(newUser.email, vertificationToken);
+        //await sendVertificationEmail(newUser.email, vertificationToken);
        
         res.status(201).json({
             success:true,
@@ -150,7 +150,7 @@ export const resendVertificationToken = async(req,res,next) =>{
 
         await user.save();
 
-        await sendVertificationEmail(user.email, newToken)
+       // await sendVertificationEmail(user.email, newToken)
 
         res.status(200).json({
             success:true,
