@@ -27,10 +27,14 @@ function App() {
              <VertificationPage />
           </PrivateRoute>
          }/>
-        <Route path='/resend-token' element={<ResetVerifyToken />} />
-        <Route path='/forgot-password' element= { <ForgotPassword />} />
-        <Route path='/forgot-password-notification' element={ <ForgotPasswordNotification/>} />
-        <Route path='/reset-password/:token' element={ <ResetPassword />}/>
+        <Route path='/resend-token' element={
+          <PrivateRoute>
+             <ResetVerifyToken />
+          </PrivateRoute>
+          } />
+        <Route path='/forgot-password' element= { <ForgotPassword /> } />
+        <Route path='/forgot-password-notification' element={ <ForgotPasswordNotification/> } />
+        <Route path='/reset-password/:token' element={ <ResetPassword />} />
 
       </Routes>
       <Footer />

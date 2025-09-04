@@ -16,8 +16,8 @@ router.post('/signup',signup)
 router.post('/signin', signin)
 router.post('/signout', signout)
 router.post('/verify-email',verifyToken,verifyEmail)
-router.post('/resend-token', resendVertificationToken)
-router.post('/forgot-password', forgotPassword)
+router.post('/resend-token',verifyToken, resendVertificationToken)
+router.post('/forgot-password',forgotPassword)
 router.post('/reset-password/:token',resetPassword)
 
 
